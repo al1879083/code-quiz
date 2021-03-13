@@ -100,7 +100,6 @@ window.addEventListener('load', function (ev) {
     //Event listeners
 
     viewHighScores.addEventListener('click', function (ev1) {
-        ev1.preventDefault();
         highScores.style.display = 'block';
         quizChallenge.style.display = 'none';
         
@@ -179,14 +178,18 @@ window.addEventListener('load', function (ev) {
         allLis[2].textContent = questionArr[index].answer3;
         allLis[3].textContent = questionArr[index].answer4;
     }
-
+    // Clears old leaderboard and writes new leaderboard
     function renderHighScores(){
+        // Clear the screen
         highScoreList.innerHTML = '';
-        var recordSet = JSON.parse(localStorage.getItem('scoreRecord'));
-        recordSet.forEach(function(ele){
-            var newLi = createNewLi();
-            newLi.textContent = ele;
-            highScoreList.appendChild(newLi);
+        // Get the new leaderboard
+        var leaderboard = JSON.parse(localStorage.getItem('scoreRecord'));
+        // Add on to the final scoreboard
+        leaderboard.forEach(function(ele){
+            var playerList = createNewLi();
+            playerList.textContent = ele;
+            // Append new player-score to leaderboard
+            highScoreList.appendChild(playerList);
         });
     }
 
