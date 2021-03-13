@@ -82,7 +82,12 @@ window.addEventListener('load', function (ev) {
     var quizSubmit = document.getElementById('quiz-submit');
 
     var correct = document.getElementById('correct');
+    correct.style.fontSize = "x-large";
+    correct.style.color = "blue";
+    correct.style.fontStyle = "italic";
     var wrong = document.getElementById('wrong');
+    wrong.style.fontSize = "x-large";
+    wrong.style.color = "red";
 
     var scoreNum = document.getElementById('score');
 
