@@ -68,11 +68,31 @@ var questionArr = [
 
 
 window.addEventListener('load', function (ev) {
+    // HTML elements
     var viewHighScores = document.getElementById('view-high-scores');
     var highScores = document.getElementById('high-scores');
     var goBack = document.querySelector('.go-back');
     var quizChallenge = document.getElementById('quiz-challenge');
+    var startQuizBtn = document.getElementById('start-quiz');
+    var quizStart = document.getElementById('quiz-start');
+    var quizQuestion = document.querySelector('.quiz-question');
 
+    var questionLi = document.querySelectorAll('.quiz-question ul li');
+    var timeoutID;
+    var quizSubmit = document.getElementById('quiz-submit');
+
+    var correct = document.getElementById('correct');
+    var wrong = document.getElementById('wrong');
+
+    var scoreNum = document.getElementById('score');
+
+    var textInput = quizSubmit.getElementsByTagName('input')[0];
+    var submitBtn = quizSubmit.getElementsByTagName('button')[0];
+    var highScoreList = document.getElementById('high-score-list');
+
+    var oneMoreTimeBtn = quizSubmit.getElementsByTagName('button')[1];
+
+    //Event listeners
 
     viewHighScores.addEventListener('click', function (ev1) {
         ev1.preventDefault();
@@ -88,9 +108,6 @@ window.addEventListener('load', function (ev) {
         highScores.style.display = 'none';
     });
 
-    var startQuizBtn = document.getElementById('start-quiz');
-    var quizStart = document.getElementById('quiz-start');
-    var quizQuestion = document.querySelector('.quiz-question');
 
     startQuizBtn.addEventListener('click', function (ev1) {
         quizStart.style.display = 'none';
@@ -99,21 +116,6 @@ window.addEventListener('load', function (ev) {
         resetTimer();
     });
 
-    var questionLi = document.querySelectorAll('.quiz-question ul li');
-    var timeoutID;
-    var quizSubmit = document.getElementById('quiz-submit');
-
-    var score = 0;
-    var correct = document.getElementById('correct');
-    var wrong = document.getElementById('wrong');
-
-    var scoreNum = document.getElementById('score');
-    
-    questionChange();
-
-    var textInput = quizSubmit.getElementsByTagName('input')[0];
-    var submitBtn = quizSubmit.getElementsByTagName('button')[0];
-    var highScoreList = document.getElementById('high-score-list');
     submitBtn.addEventListener('click', function () {
         var initAndScore = textInput.value + ' - ' + scoreNum.textContent;
 
@@ -136,10 +138,11 @@ window.addEventListener('load', function (ev) {
         }
     });
 
-    var oneMoreTimeBtn = quizSubmit.getElementsByTagName('button')[1];
     oneMoreTimeBtn.addEventListener('click', function () {
         window.location.reload();
     });
+
+    questionChange();
 
 
 
@@ -181,6 +184,8 @@ window.addEventListener('load', function (ev) {
             highScoreList.appendChild(newLi);
         });
     }
+
+    var score = 0;
 
     function questionChange() {
         var index = 0;
@@ -261,3 +266,4 @@ function resetTimer() {
             clearInterval(intervalID);
         }
     }, 1000);
+}
