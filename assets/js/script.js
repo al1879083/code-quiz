@@ -77,7 +77,7 @@ window.addEventListener('load', function (ev) {
     var quizStart = document.getElementById('quiz-start');
     var quizQuestion = document.querySelector('.quiz-question');
 
-    var questionLi = document.querySelectorAll('.quiz-question ul li');
+    var questionList = document.querySelectorAll('.quiz-question ul li');
     var timeoutID;
     var quizSubmit = document.getElementById('quiz-submit');
 
@@ -147,6 +147,7 @@ window.addEventListener('load', function (ev) {
         window.location.reload();
     });
 
+    // Start the game
     questionChange();
 
 
@@ -197,20 +198,21 @@ window.addEventListener('load', function (ev) {
     var score = 0;
 
     function questionChange() {
+        // Current question
         var index = 0;
-        questionLi.forEach(function (li) {
-            correct.style.display = 'none';
-            wrong.style.display = 'none';
-            li.addEventListener('click', function () {
-                li.style.backgroundColor = "#99ccff";
-                // li.classList.add('current');
+        questionList.forEach(function (questionBox) {
+            correct.style.display = '';
+            wrong.style.display = '';
+            // Wait for the player to click on an answer
+            questionBox.addEventListener('click', function () {
+                questionBox.style.backgroundColor = "#99ccff";
                 // when the answer is correct, the correct part shows and score +1. when get the wrong answer, the wrong part shows and timer -5
-                if (li.innerHTML === questionArr[index].corAns) {
+                if (questionBox.innerHTML === questionArr[index].corAns) {
                     score++;
                     correct.style.display = 'block';
                 } else {
                     wrong.style.display = 'block';
-                    timer -= 5;
+                    timer -= 10;
                 }
 
                 // if your answers are all wrong, you'll get 0
