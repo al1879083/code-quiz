@@ -99,6 +99,7 @@ window.addEventListener('load', function (ev) {
 
     //Event listeners
 
+    // View leaderboard
     viewHighScores.addEventListener('click', function (ev1) {
         highScores.style.display = 'block';
         quizChallenge.style.display = 'none';
@@ -106,13 +107,13 @@ window.addEventListener('load', function (ev) {
         renderHighScores();
     });
 
-
+    // Go back button
     goBack.addEventListener('click', function (evt) {
         quizChallenge.style.display = 'block';
         highScores.style.display = 'none';
     });
 
-
+    // Start button
     startQuizBtn.addEventListener('click', function (ev1) {
         quizStart.style.display = 'none';
         quizQuestion.style.display = 'block';
@@ -251,27 +252,32 @@ function createNewLi() {
 }
 
 var timer;
-var timerCountDown = document.getElementById('timer-num');
-var intervalID;
+var countdownTimer = document.getElementById('timer-num');
 var quizSubmit = document.getElementById('quiz-submit');
-function resetTimer() {
-    timer = 15 * questionArr.length;
-    timerCountDown.textContent = timer;
 
-    clearInterval(intervalID);
-    intervalID = setInterval(function () {
+
+
+function resetTimer() {
+    // timer gets 15 seconds for each question
+    timer = 15 * questionArr.length;
+    // set HTML timer to the javascript timer
+    countdownTimer.textContent = timer;
+
+    // start the timer controlling the game timer
+    setInterval(function () {
+        // count down 1 second
         timer--;
-        timerCountDown.textContent = timer;
+        // update the HTML timer
+        countdownTimer.textContent = timer;
         
+        // Alert once time is up
         if (timer <= 0) {
             timer = 0;
-            clearInterval(intervalID);
-            alert('Time Out!');
+            alert('Times Up!');
         }
         // submit page shows up, clear the interval
         if (quizSubmit.style.display === 'block') {
-            timerCountDown.textContent = "0";
-            clearInterval(intervalID);
+            countdownTimer.textContent = "0";
         }
     }, 1000);
 }
