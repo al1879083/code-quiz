@@ -1,3 +1,4 @@
+// List of all questions in the quiz
 var questionArr = [
     {
         question: '1. Inside which HTML element do we put the JavaScript?',
@@ -66,7 +67,7 @@ var questionArr = [
 ];
 
 
-
+// Detects when the page loads
 window.addEventListener('load', function (ev) {
     // HTML elements
     var viewHighScores = document.getElementById('view-high-scores');
@@ -95,55 +96,72 @@ window.addEventListener('load', function (ev) {
     var submitBtn = quizSubmit.getElementsByTagName('button')[0];
     var highScoreList = document.getElementById('high-score-list');
 
-    var oneMoreTimeBtn = quizSubmit.getElementsByTagName('button')[1];
+    var tryAgainBTN = quizSubmit.getElementsByTagName('button')[1];
 
     //Event listeners
 
     // View leaderboard
     viewHighScores.addEventListener('click', function (ev1) {
+        // Make the leaderboard visible
         highScores.style.display = 'block';
+        // Make the quiz invisible
         quizChallenge.style.display = 'none';
         
+        // Update the high scores
         renderHighScores();
     });
 
     // Go back button
     goBack.addEventListener('click', function (evt) {
+        // Make the quiz visible
         quizChallenge.style.display = 'block';
+        // Make the leaderboard invisible
         highScores.style.display = 'none';
     });
 
     // Start button
     startQuizBtn.addEventListener('click', function (ev1) {
+        // Make the start button invisible
         quizStart.style.display = 'none';
+        // Make the quiz questions visible
         quizQuestion.style.display = 'block';
 
+        // Reset the timer used for the quiz
         resetTimer();
     });
 
+    // Submit score button
     submitBtn.addEventListener('click', function () {
+        // The initial and score of the user.
         var initAndScore = textInput.value + ' - ' + scoreNum.textContent;
 
+        // Array used to hold all inital-score pairs
         var scoreRecord = [];
+        // If there are any initial-score pairs in local storage
         if (localStorage.getItem('scoreRecord')) {
+            // Get the pair and store it in the array
             scoreRecord = JSON.parse(localStorage.getItem('scoreRecord'));
         }
 
-        // if someone type nothing or just space, will alert him to type.
+        // If the user left the intial field blank
         if (textInput.value.trim() === ''){
             alert('Please type something!');
         }else {
+            // Add the new intial-score pair to the array
             scoreRecord.unshift(initAndScore);
-            var recordSet = [...new Set(scoreRecord)];
-            localStorage.setItem('scoreRecord', JSON.stringify(recordSet));
+            // Store the array in local storage under the name 'scoreRecord'
+            localStorage.setItem('scoreRecord', JSON.stringify(scoreRecord));
 
+            // Update the high scores
             renderHighScores();
 
             alert("You're all set!");
         }
     });
 
-    oneMoreTimeBtn.addEventListener('click', function () {
+    // Button to try again
+    tryAgainBTN.addEventListener('click', function () {
+        // Reload the page
         window.location.reload();
     });
 
@@ -157,28 +175,38 @@ window.addEventListener('load', function (ev) {
     clearHighScores.addEventListener('click', function (evt) {
         // localStorage.clear();
         localStorage.setItem('scoreRecord', JSON.stringify([]));
+        // Update the high scores
         renderHighScores();
     });
 
 
     //Functions
 
+    // Updates question element
+    // Index = current question
     function renderQuestion(index) {
+        // Get the question title from the HTML
         var quizQuestionTitle = quizQuestion.querySelector('.quiz-question-title');
-        var allLis = quizQuestion.querySelectorAll('li');
+        // Get the answer list from the HTML
+        var answerList = quizQuestion.querySelectorAll('li');
+        // Make the correct element invisible
         correct.style.display = 'none';
+        // Make the wrong element invisible
         wrong.style.display = 'none';
+        // Update the question title to the title of the current question
         quizQuestionTitle.textContent = questionArr[index].question;
 
-        allLis.forEach(function (li) {
+        // Format how each answer will look
+        answerList.forEach(function (li) {
             li.className = '';
             li.style.backgroundColor = '#000091';
         });
 
-        allLis[0].textContent = questionArr[index].answer1;
-        allLis[1].textContent = questionArr[index].answer2;
-        allLis[2].textContent = questionArr[index].answer3;
-        allLis[3].textContent = questionArr[index].answer4;
+        // Set the HTML answers to the answers from the question array.
+        answerList[0].textContent = questionArr[index].answer1;
+        answerList[1].textContent = questionArr[index].answer2;
+        answerList[2].textContent = questionArr[index].answer3;
+        answerList[3].textContent = questionArr[index].answer4;
     }
     // Clears old leaderboard and writes new leaderboard
     function renderHighScores(){
@@ -188,7 +216,7 @@ window.addEventListener('load', function (ev) {
         var leaderboard = JSON.parse(localStorage.getItem('scoreRecord'));
         // Add on to the final scoreboard
         leaderboard.forEach(function(ele){
-            var playerList = createNewLi();
+            var playerList = document.createElement('li');
             playerList.textContent = ele;
             // Append new player-score to leaderboard
             highScoreList.appendChild(playerList);
@@ -208,32 +236,39 @@ window.addEventListener('load', function (ev) {
                 questionBox.style.backgroundColor = "#99ccff";
                 // when the answer is correct, the correct part shows and score +1. when get the wrong answer, the wrong part shows and timer -5
                 if (questionBox.innerHTML === questionArr[index].corAns) {
+                    // Add to your score
                     score++;
+                    // Make the "Correct" element visible
                     correct.style.display = 'block';
                 } else {
+                    // Make the "Wrong" element visible
                     wrong.style.display = 'block';
+                    // Deduct 10 seconds from timer
                     timer -= 10;
                 }
 
-                // if your answers are all wrong, you'll get 0
-                if (score === 0){
-                    scoreNum.textContent = 0;
-                }else {
-                    scoreNum.textContent = score * parseInt(80 / questionArr.length) + parseInt(timer / 5);
-                }
+                // Set the score element in HTML = to the final score
+                // The final score is determined by this formula
+                scoreNum.textContent = score * parseInt(80 / questionArr.length) + parseInt(timer / 5);
 
                 // set a timeout for every question
+                // Creates a pause in between questions
                 clearTimeout(timeoutID);
                 timeoutID = setTimeout(function () {
+                    // If you just answered the last question
                     if (index >= questionArr.length - 1) {
+                        // Make all elements invisible except the submit element
                         quizQuestion.style.display = 'none';
                         quizSubmit.style.display = 'block';
                         correct.style.display = 'none';
                         wrong.style.display = 'none';
+                    // If that was not the final question
                     } else {
+                        // Increase the question number
                         index++;
                     }
 
+                    // Display the questions
                     renderQuestion(index);
                     clearTimeout(timeoutID);
                 }, 800);
@@ -243,22 +278,15 @@ window.addEventListener('load', function (ev) {
         });
     }
 
-    function onlyUnique(value, index, self) {
-        return self.indexOf(value) === index;
-    }
-
 });
 
-function createNewLi() {
-    return document.createElement('li');
-}
 
 var timer;
 var countdownTimer = document.getElementById('timer-num');
 var quizSubmit = document.getElementById('quiz-submit');
 
 
-
+// timer used for the quiz
 function resetTimer() {
     // timer gets 15 seconds for each question
     timer = 15 * questionArr.length;
@@ -277,7 +305,7 @@ function resetTimer() {
             timer = 0;
             alert('Times Up!');
         }
-        // submit page shows up, clear the interval
+        // if the submit page is visible, set the timer to 0
         if (quizSubmit.style.display === 'block') {
             countdownTimer.textContent = "0";
         }
